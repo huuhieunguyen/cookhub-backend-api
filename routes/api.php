@@ -12,6 +12,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\FollowController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
@@ -42,6 +43,7 @@ Route::prefix('v1/authen')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('v1/authen')->group(function () {
+        Route::get('/me', [AuthenController::class, 'me']);
         Route::post('/logout', [AuthenController::class, 'logout']);
         Route::patch('/user', [UserController::class, 'update']);
         Route::patch('/change-password', [ChangePasswordController::class, 'changePassword']);
@@ -56,6 +58,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{postId}/unlike', [PostLikeController::class, 'destroy']);
 
         Route::get('/get-post-by-id/{postId}', [PostController::class, 'getPostById']);
+    });
+
+    Route::prefix('v1/recipes')->group(function () {
+        Route::post('/add-new-recipe', [RecipeController::class, 'addNewRecipe']);
+        Route::get('/get-my-recipes', [RecipeController::class, 'getMyRecipes']);
+        Route::patch('/update-recipe/{recipeId}', [RecipeController::class, 'updateRecipe']);
+        Route::delete('/delete-recipe/{recipeId}', [RecipeController::class, 'deleteRecipe']);
     });
 
     Route::prefix('v1/user-relationships')->group(function () {
@@ -97,6 +106,13 @@ Route::prefix('v1/users')->group(function () {
     Route::get('/{id}', [UserController::class, 'show']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
 
+});
+
+//Recipes
+Route::prefix('v1/recipes')->group(function () {
+    Route::get('/get-all-recipes', [RecipeController::class, 'getAllRecipes']);
+    Route::get('/get-recipe/{recipeId}', [RecipeController::class, 'getRecipeById']);
+    Route::get('/get-recipes-by-author/{authorId}', [RecipeController::class, 'getRecipesByAuthorId']);
 });
 
 // Posts
