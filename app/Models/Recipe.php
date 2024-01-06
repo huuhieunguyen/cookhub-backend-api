@@ -5,19 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Recipe extends Model
 {
     use HasFactory;
     
     protected $fillable = [
-        'sender_id',
         'author_id',
-        'content',
-        'location',
-        'like_count',
-        // 'image_url',
-        // 'created_at',
-        // 'updated_at',
+        'cover_url',
+        'title',
+        'desc',
+        'rating',
+        'cook_time',
+        'level',
+        'review_count',
+        'regional',
+        'dish_type',
+        'serves',
     ];
     
     protected $casts = [
@@ -33,6 +36,21 @@ class Post extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function steps()
+    {
+        return $this->hasMany(Step::class);
+    }
+    
+    public function ingredients()
+    {
+        return $this->hasMany(Ingredient::class);
+    }
+    
+    public function savedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'saved_recipes');
     }
 
     public function likes()

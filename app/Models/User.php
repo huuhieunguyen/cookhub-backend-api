@@ -26,7 +26,6 @@ class User extends Authenticatable
         'email_verification_token',
         'email_verified_at',
         'phone_number',
-        'tag_name',
         'avatar_url',
         'cover_image_url',
         'is_active',
@@ -36,10 +35,6 @@ class User extends Authenticatable
         'portfolio_url',
         'count_followees',
         'count_followers',
-        // 'receiver_id',
-        // 'sender_id',
-        // 'followees',
-        // 'followers',
     ];
 
     /**
@@ -61,9 +56,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function posts()
+    public function recipes()
     {
-        return $this->hasMany(Post::class, 'author_id');
+        return $this->hasMany(Recipe::class, 'author_id');
+    }
+
+    public function savedRecipes()
+    {
+        return $this->belongsToMany(Recipe::class, 'saved_recipes');
     }
 
     public function followers()

@@ -123,6 +123,11 @@ class AuthenController extends Controller
         ], 201);
     }
 
+    public function me(Request $request)
+    {
+        return $request->user();
+    }
+
 //   public function forgetPassword(Request $request)
 //   {
 //       // Validate the request data
