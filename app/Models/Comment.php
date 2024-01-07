@@ -10,9 +10,10 @@ class Comment extends Model
 {
     use HasFactory, HasApiTokens;
     protected $fillable = [
+        'recipe_id',
         'user_id',
-        'post_id',
-        'content'
+        'content',
+        'rating',
     ];
 
     public function user()
@@ -20,8 +21,13 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function post()
+    public function recipe()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Recipe::class);
+    }
+
+    public function commentImages()
+    {
+        return $this->hasMany(CommentImage::class);
     }
 }

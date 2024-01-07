@@ -73,6 +73,24 @@ class Recipe extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function calculateAverageRating()
+    {
+        $averageRating = $this->comments->avg('rating');
+        
+        // Round the average rating to 1 decimal place
+        $averageRating = round($averageRating, 1);
+
+        $this->rating = $averageRating;
+        return $this->rating;
+    }
+
+    public function reviews_count()
+    {        
+        $this->review_count = $this->comments->count('review_count');
+
+        return $this->review_count;
+    }
+
     public function notifications()
     {
         return $this->hasMany(Notification::class);

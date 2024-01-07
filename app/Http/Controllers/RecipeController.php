@@ -155,4 +155,17 @@ class RecipeController extends Controller
 
         return response()->json(['message' => 'Recipe deleted successfully']);
     }
+
+    public function deleteRecipeByAdmin($id)
+    {
+        $recipe = Recipe::find($id);
+
+        if (!$recipe) {
+            return response()->json(['error' => 'Recipe not found'], 404);
+        }
+
+        $recipe->delete();
+
+        return response()->json(['message' => 'Recipe deleted successfully']);
+    }
 }

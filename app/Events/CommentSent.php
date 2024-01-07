@@ -35,7 +35,7 @@ class CommentSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('post.' . $this->comment->post_id);
+        return new Channel('recipe.' . $this->comment->recipe_id);
     }
 
     public function broadcastWith()
