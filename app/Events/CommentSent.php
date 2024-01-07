@@ -35,7 +35,7 @@ class CommentSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('recipe.' . $this->comment->recipe_id);
+        return new PrivateChannel('author-channel.' . $this->comment->recipe->author_id);
     }
 
     public function broadcastWith()
@@ -43,5 +43,15 @@ class CommentSent implements ShouldBroadcast
         return [
             'comment' => new CommentResource($this->comment),
         ];
+    }
+
+    /**
+     * Get the event name for broadcasting.
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'post.comment.notification';
     }
 }
