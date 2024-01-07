@@ -5,31 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\CommentResource;
-use App\Http\Resources\CommentWithoutPostResource;
-use App\Events\CommentPosted;
+use App\Http\Resources\CommentWithoutRecipeResource;
 use App\Events\CommentSent;
 use App\Models\Comment;
-use App\Models\Post;
+use App\Models\Recipe;
 
 class CommentController extends Controller
 {
     public function createComment(Request $request)
     {
-        // Get the authenticated user
+        /** @var \App\Models\User $user **/
         $user = Auth::user();
 
         // Validate the request data
         $validatedData = $request->validate([
             'content' => 'required',
-            'post_id' => 'required|exists:posts,id',
+            'recipe_id' => 'required|exists:recipes,id',
+            'rating' => 'nullable|integer',
         ]);
 
         // Create a new comment
         $comment = Comment::create([
             'user_id' => $user->id,
-            'post_id' => $validatedData['post_id'],
+            'recipe_id' => $validatedData['recipe_id'],
             'content' => $validatedData['content'],
+            'rating' => $validatedData['rating'],
         ]);
+
+        // calculate avg rating for the recipe & update review_count
+        $recipe = Recipe::find($request->recipe_id); // Get a specific recipe
+        $recipe->calculateAverageRating();
+        $recipe->reviews_count();
+
+        $recipe->save();
 
         // broadcast(new CommentSent($comment));
         event(new CommentSent($comment));
@@ -53,21 +61,23 @@ class CommentController extends Controller
         ],200);
     }
 
-    public function getCommentsByPost(Request $request, $postId)
+    public function getCommentsByRecipe(Request $request, $recipeId)
     {
-        $post = Post::find($postId);
+        $recipe = Recipe::find($recipeId);
 
-        if (!$post) {
-            return response()->json(['message' => 'Post not found'], 404);
+        if (!$recipe) {
+            return response()->json(['message' => 'Recipe not found'], 404);
         }
 
         $perPage = $request->query('perPage', 10);
-        $comments = $post->comments()->paginate($perPage);
+        $comments = $recipe->comments()
+                            ->orderBy('created_at', 'desc')
+                            ->paginate($perPage);
 
         return response()->json([
-            'post' => $post,
-            // 'author' => $post->author,
-            'comments' => CommentWithoutPostResource::collection($comments),
+            'recipe_id' => $recipe->id,
+            // 'author' => $recipe->author,
+            'comments' => CommentWithoutRecipeResource::collection($comments),
             'pagination' => [
                 'current_page' => $comments->currentPage(),
                 'last_page' => $comments->lastPage(),
@@ -91,6 +101,13 @@ class CommentController extends Controller
         }
 
         $comment->content = $request->input('content');
+        $comment->rating = $request->input('rating');
+
+        // calculate avg rating for the recipe & update review_count
+        $recipe = Recipe::find($comment->recipe_id); // Get a specific recipe
+        $recipe->calculateAverageRating();
+        $recipe->save();
+
         $comment->save();
 
         return response()->json(['message' => 'Comment updated successfully', 'comment' => $comment], 200);
@@ -104,12 +121,19 @@ class CommentController extends Controller
             return response()->json(['message' => 'Comment not found'], 404);
         }
 
-        // Check if the authenticated user is the author of the post or the owner of the comment
-        if (Auth::id() !== $comment->post->user_id && Auth::id() !== $comment->user_id) {
+        // Check if the authenticated user is the author of the recipe or the owner of the comment
+        if (Auth::id() !== $comment->recipe->user_id && Auth::id() !== $comment->user_id) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         $comment->delete();
+
+        // calculate avg rating for the recipe & update review_count
+        $recipe = Recipe::find($comment->recipe_id); // Get a specific recipe
+        $recipe->calculateAverageRating();
+        $recipe->reviews_count();
+
+        $recipe->save();
 
         return response()->json(['message' => 'Comment deleted successfully'], 200);
     }
