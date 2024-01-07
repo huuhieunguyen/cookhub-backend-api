@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostResource extends JsonResource
+class RecipeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +17,9 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'author_id' => $this->author_id,
-            'content' => $this->content,
-            'like_count' => $this->like_count,
+            'title' => $this->title,
+            'rating' => $this->rating,
+            'review_count' => $this->review_count,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             // Add any other relevant post data here...

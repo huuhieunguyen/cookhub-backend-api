@@ -86,11 +86,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-messages-by-id/{chat}',[ChatController::class, 'getMessagesById']);
     });
 
-    Route::prefix('v1/comment')->group(function () {
+    Route::prefix('v1/comments')->group(function () {
         Route::post('/create-comment', [CommentController::class, 'createComment']);
-
-        Route::put('/{commentId}', 'CommentController@updateCommentById');
-        Route::delete('/{commentId}', 'CommentController@deleteCommentById');
+        Route::delete('/delete-comment/{commentId}', [CommentController::class, 'deleteCommentById']);
+        Route::patch('/update-comment/{commentId}', [CommentController::class, 'updateCommentById']);
     });
 
     Route::prefix('v1/notifications')->group(function () {
@@ -108,11 +107,18 @@ Route::prefix('v1/users')->group(function () {
 
 });
 
-//Recipes
+// Recipes
 Route::prefix('v1/recipes')->group(function () {
     Route::get('/get-all-recipes', [RecipeController::class, 'getAllRecipes']);
     Route::get('/get-recipe/{recipeId}', [RecipeController::class, 'getRecipeById']);
     Route::get('/get-recipes-by-author/{authorId}', [RecipeController::class, 'getRecipesByAuthorId']);
+    Route::delete('/delete-recipes-by-admin/{recipeId}', [RecipeController::class, 'deleteRecipeByAdmin']);
+});
+
+// Comments
+Route::prefix('v1/comments')->group(function () {
+    Route::get('/get-comment/{commentId}', [CommentController::class, 'getCommentById']);
+    Route::get('/get-comments/{recipeId}', [CommentController::class, 'getCommentsByRecipe']);
 });
 
 // Posts
@@ -121,11 +127,6 @@ Route::prefix('v1/posts')->group(function () {
     Route::get('/posts_without_users_like', [PostController::class, 'getPosts']);
     Route::get('/{authorId}', [PostController::class, 'getPostsByAuthorIdWithLikes']);
     Route::get('/by_author_without_users_like/{authorId}', [PostController::class, 'getPostsByAuthorID']);
-});
-
-Route::prefix('v1/comment')->group(function () {
-    Route::get('/get-comments/{postId}', [CommentController::class, 'getCommentsByPost']);
-
 });
 
 /*
