@@ -42,6 +42,7 @@ Route::prefix('v1/authen')->group(function () {
 // Protected Routes
 Route::middleware('auth:sanctum')->group(function () {
 
+    // Authentication
     Route::prefix('v1/authen')->group(function () {
         Route::get('/me', [AuthenController::class, 'me']);
         Route::post('/logout', [AuthenController::class, 'logout']);
@@ -49,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/change-password', [ChangePasswordController::class, 'changePassword']);
     });
 
+    // Posts
     Route::prefix('v1/posts')->group(function () {
         Route::post('/', [PostController::class, 'store']);
         Route::patch('/{postId}', [PostController::class, 'update']);
@@ -60,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-post-by-id/{postId}', [PostController::class, 'getPostById']);
     });
 
+    // Recipes
     Route::prefix('v1/recipes')->group(function () {
         Route::post('/add-new-recipe', [RecipeController::class, 'addNewRecipe']);
         Route::get('/get-my-recipes', [RecipeController::class, 'getMyRecipes']);
@@ -67,6 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete-recipe/{recipeId}', [RecipeController::class, 'deleteRecipe']);
     });
 
+    // User Relationships
     Route::prefix('v1/user-relationships')->group(function () {
         Route::get('/followers', [FollowController::class, 'getFollowers']);
         Route::get('/followees', [FollowController::class, 'getFollowees']);
@@ -76,7 +80,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/unfollow', [FollowController::class, 'unfollow']);
     });
 
-    // Chat routes
+    // Chat
     Route::prefix('v1/chat')->group(function () {
         Route::post('/create-chat',[ChatController::class, 'createChat']);
         Route::get('/get-chats',[ChatController::class, 'getChats']);
@@ -86,12 +90,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get-messages-by-id/{chat}',[ChatController::class, 'getMessagesById']);
     });
 
+    // Comments
     Route::prefix('v1/comments')->group(function () {
         Route::post('/create-comment', [CommentController::class, 'createComment']);
         Route::delete('/delete-comment/{commentId}', [CommentController::class, 'deleteCommentById']);
         Route::patch('/update-comment/{commentId}', [CommentController::class, 'updateCommentById']);
     });
 
+    // Notifications
     Route::prefix('v1/notifications')->group(function () {
         Route::get('/', [NotificationController::class, 'getNotifications']);
         Route::patch('/read-notification/{notificationId}', [NotificationController::class, 'markAsRead']);
