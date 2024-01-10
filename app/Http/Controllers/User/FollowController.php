@@ -12,28 +12,6 @@ use App\Models\Relationship;
 
 class FollowController extends Controller
 {
-    // public function follow(Request $request)
-    // {
-    //     /** @var \App\Models\User $authUser **/
-    //     $authUser = Auth::user();
-    //     $userId = $request->input('user_id');
-
-    //     // Check if the authenticated user is trying to follow their own account
-    //     if ($authUser->id === $userId) {
-    //         return response()->json(['message' => 'You cannot follow your own account'], 400);
-    //     }
-
-    //     // Check if the authenticated user is already following the user
-    //     if ($authUser->followees()->where('followee_id', $userId)->exists()) {
-    //         return response()->json(['message' => 'You are already following this user'], 400);
-    //     }
-
-    //     // Attach the user as a followee
-    //     $authUser->followees()->attach($userId);
-
-    //     return response()->json(['message' => 'User followed successfully']);
-    // }
-
     public function follow(Request $request)
     {
         /** @var \App\Models\User $authUser **/
