@@ -42,7 +42,7 @@ class ForgotPasswordController extends Controller
                 $verify2->delete();
             }
 
-            $token = random_int(100000, 999999);
+            $token = random_int(10000, 99999);
             $password_reset = DB::table('password_resets')->insert([
                 'email' => $request->all()['email'],
                 'token' =>  $token,
@@ -55,7 +55,7 @@ class ForgotPasswordController extends Controller
 
                 return new JsonResponse([
                     'success' => true, 
-                    'message' => "Please check your email for a 6 digit pin"], 200
+                    'message' => "Please check your email for a 5 digit pin"], 200
                 );
             }
         } else {
@@ -92,7 +92,7 @@ class ForgotPasswordController extends Controller
         if ($check->exists()) {
 
             $difference = Carbon::now()->diffInSeconds($check->first()->created_at);
-            if ($difference > 3600) {
+            if ($difference > 180) {
                 return new JsonResponse([
                     'success' => false, 
                     'message' => "Token Expired"], 
