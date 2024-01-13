@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ingredient extends Model
+class GroceryIngredient extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'recipe_id',
+        'grocery_recipe_id',
         'name',
         'amount',
         'unit',
-        'status'
+        'status',
     ];
 
-    public function recipe()
+    public function groceryRecipe()
     {
-        return $this->belongsTo(Recipe::class);
+        return $this->belongsTo(GroceryRecipe::class);
     }
 }
