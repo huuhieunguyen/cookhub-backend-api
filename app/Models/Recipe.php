@@ -47,10 +47,10 @@ class Recipe extends Model
     {
         return $this->hasMany(Ingredient::class);
     }
-    
+
     public function savedByUsers()
     {
-        return $this->belongsToMany(User::class, 'saved_recipes');
+        return $this->hasMany(SavedRecipe::class, 'recipe_id');
     }
 
     public function likes()
