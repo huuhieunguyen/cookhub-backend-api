@@ -17,6 +17,7 @@ use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\GroceryRecipeController;
+use App\Http\Controllers\SavedRecipeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add-new-recipe-to-grocery', [GroceryRecipeController::class, 'addNewRecipeToGrocery']);
         Route::patch('/update-grocery-recipe/{grocery_recipe_id}', [GroceryRecipeController::class, 'updateRecipeInGrocery']);
         Route::delete('/delete-grocery-recipe/{grocery_recipe_id}', [GroceryRecipeController::class, 'destroy']);
+    });
+
+    // Saved Recipes
+    Route::prefix('v1/saved-recipes')->group(function () {
+        Route::post('/save-a-recipe', [SavedRecipeController::class, 'saveRecipe']);
+        Route::get('/get-saved-recipes', [SavedRecipeController::class, 'getSavedRecipes']);
+        Route::delete('/delete-saved-recipe/{saved_recipe_id}', [SavedRecipeController::class, 'deleteSavedRecipe']);
     });
 
     // User Relationships
