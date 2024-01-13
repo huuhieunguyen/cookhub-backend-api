@@ -18,6 +18,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\GroceryRecipeController;
 use App\Http\Controllers\SavedRecipeController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,6 +142,13 @@ Route::prefix('v1/recipes')->group(function () {
 Route::prefix('v1/grocery-recipes')->group(function () {
     Route::get('/get-all-recipes-in-grocery', [GroceryRecipeController::class, 'getAllRecipesInGrocery']);
     Route::get('/get-a-recipe-in-grocery/{grocery_recipe_id}', [GroceryRecipeController::class, 'getRecipeByIdInGrocery']);
+});
+
+// Search Recipes
+Route::prefix('v1/search-recipes')->group(function () {
+    Route::get('/quick', [SearchController::class, 'quickSearch']);
+    Route::get('/bar', [SearchController::class, 'textSearch']);
+    Route::get('/filter', [SearchController::class, 'filterSearch']);
 });
 
 // Comments
