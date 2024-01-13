@@ -1,5 +1,5 @@
 @component('mail::message')
-# [GoTrip] Reset Password
+# [CookHub] Reset Password
 
 Your six-digit PIN is <h4>{{$pin}}</h4>
 <p>Please do not share your One Time Pin With Anyone. 

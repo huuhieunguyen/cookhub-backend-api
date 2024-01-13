@@ -75,7 +75,9 @@ class RecipeController extends Controller
         $recipes = Recipe::orderBy('created_at', 'desc')->paginate($perPage);
 
         $recipes->load(['author:id,name,avatar_url,count_followers']);
-        
+        // $recipes->load('steps.images'); // Load the relationships with the recipe
+        // $recipes->load('ingredients'); // Load the relationships with the ingredient
+
         return response()->json($recipes);
     }
 
