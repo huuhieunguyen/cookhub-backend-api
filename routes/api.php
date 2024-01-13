@@ -16,6 +16,7 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\GroceryRecipeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/delete-recipe/{recipeId}', [RecipeController::class, 'deleteRecipe']);
     });
 
+    // Grocery Recipes
+    Route::prefix('v1/grocery-recipes')->group(function () {
+        Route::post('/add-new-recipe-to-grocery', [GroceryRecipeController::class, 'addNewRecipeToGrocery']);
+        Route::patch('/update-grocery-recipe/{grocery_recipe_id}', [GroceryRecipeController::class, 'updateRecipeInGrocery']);
+        Route::delete('/delete-grocery-recipe/{grocery_recipe_id}', [GroceryRecipeController::class, 'destroy']);
+    });
+
     // User Relationships
     Route::prefix('v1/user-relationships')->group(function () {
         Route::get('/followers', [FollowController::class, 'getFollowers']);
@@ -119,6 +127,12 @@ Route::prefix('v1/recipes')->group(function () {
     Route::get('/get-recipe/{recipeId}', [RecipeController::class, 'getRecipeById']);
     Route::get('/get-recipes-by-author/{authorId}', [RecipeController::class, 'getRecipesByAuthorId']);
     Route::delete('/delete-recipes-by-admin/{recipeId}', [RecipeController::class, 'deleteRecipeByAdmin']);
+});
+
+// Grocery Recipes
+Route::prefix('v1/grocery-recipes')->group(function () {
+    Route::get('/get-all-recipes-in-grocery', [GroceryRecipeController::class, 'getAllRecipesInGrocery']);
+    Route::get('/get-a-recipe-in-grocery/{grocery_recipe_id}', [GroceryRecipeController::class, 'getRecipeByIdInGrocery']);
 });
 
 // Comments
