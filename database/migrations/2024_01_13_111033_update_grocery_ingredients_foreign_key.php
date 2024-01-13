@@ -10,10 +10,7 @@ return new class extends Migration
     {
         Schema::table('grocery_ingredients', function (Blueprint $table) {
             $table->dropForeign(['grocery_recipe_id']);
-            $table->foreign('grocery_recipe_id')
-                ->references('id')
-                ->on('grocery_recipes')
-                ->onDelete('cascade');
+            $table->foreign('grocery_recipe_id')->references('id')->on('grocery_recipes')->onDelete('cascade');
         });
     }
 
@@ -26,9 +23,7 @@ return new class extends Migration
     {
         Schema::table('grocery_ingredients', function (Blueprint $table) {
             $table->dropForeign(['grocery_recipe_id']);
-            $table->foreign('grocery_recipe_id')
-                ->references('id')
-                ->on('grocery_recipes');
+            $table->foreign('grocery_recipe_id')->references('id')->on('grocery_recipes');
         });
     }
 };

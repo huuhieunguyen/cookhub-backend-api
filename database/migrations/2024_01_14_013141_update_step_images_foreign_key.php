@@ -13,13 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('post_id');
-            $table->string('image_url');
-            $table->timestamps();
-
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+        Schema::table('step_images', function (Blueprint $table) {
+            $table->dropForeign(['step_id']);
+            $table->foreign('step_id')->references('id')->on('steps')->onDelete('cascade');
         });
     }
 
@@ -30,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::table('step_images', function (Blueprint $table) {
+            //
+        });
     }
 };

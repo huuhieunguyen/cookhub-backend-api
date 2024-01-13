@@ -12,7 +12,7 @@ class Notification extends Model
     protected $fillable = [
         'author_id',
         'user_id',
-        'post_id',
+        'recipe_id',
         'type',
         'message',
         'is_read',
@@ -36,8 +36,8 @@ class Notification extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function post()
+    public function recipe()
     {
-        return $this->belongsTo(Post::class);
+        return $this->belongsTo(Recipe::class);
     }
 }
