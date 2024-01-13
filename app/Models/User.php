@@ -63,7 +63,7 @@ class User extends Authenticatable
 
     public function savedRecipes()
     {
-        return $this->belongsToMany(Recipe::class, 'saved_recipes');
+        return $this->hasMany(SavedRecipe::class, 'owner_id');
     }
 
     public function followers()
